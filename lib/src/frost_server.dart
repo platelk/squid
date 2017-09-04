@@ -1,9 +1,13 @@
 part of frost;
 
-typedef Handler = void Function(Request req, Response res);
-typedef GroupHandler = void Function(RouteGroup group);
 
 class FrostServer {
+  Routes _routeGroup;
+
+  FrostServer() {
+    this._routeGroup = new Routes();
+  }
+
   void before(String path, Handler handler) {
 
   }

@@ -9,6 +9,5 @@ part 'src/frost_server.dart';
 part 'src/http_method.dart';
 
 // Route
-part 'src/route/route.dart';
-part 'src/route/route_path.dart';
-part 'src/route/route_group.dart';
+part 'src/route/route_entry.dart';
+part 'src/route/routes.dart';
