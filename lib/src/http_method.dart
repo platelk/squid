@@ -14,4 +14,12 @@ class HttpMethod {
   final String value;
   
   const HttpMethod._(this.value);
+
+  @override
+  bool operator==(Object object) {
+    if (object is HttpMethod) {
+      return object.value == this.value;
+    }
+    return false;
+  }
 }
