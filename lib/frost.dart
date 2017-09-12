@@ -2,9 +2,11 @@ library frost;
 
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
+
+import 'package:stream_channel/stream_channel.dart';
 
 import 'package:shelf/shelf.dart' as shelf;
-import 'package:shelf/shelf_io.dart' as io;
 
 part 'src/default_server.dart';
 

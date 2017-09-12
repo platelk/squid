@@ -1,6 +1,7 @@
 name: frost
 dependencies:
   shelf: "^0.7.0"
+  stream_channel: "^1.6.1"
 dev_dependencies:
   grinder: any
   test: "^0.12.24+2"
