@@ -3,97 +3,94 @@ part of frost;
 const String userAgent = "user-agent";
 
 class Request {
-  HttpRequest _req;
-  shelf.Request _shelfReq;
+  shelf.Request _shelf;
   Encoding encoding;
 
-  Request.fromHttpRequest(HttpRequest this._req);
+  Request.fromShelf(shelf.Request this._shelf);
+
   Request();
 
-  Map<String, String> get attribute {
-    return {};
-  }
+  Future<String> readAsString([Encoding encoding]) =>
+      this._shelf.readAsString(encoding);
 
-  Stream<List<int>> get body {
-    return this._body.read();
-  }
+  Stream<List<int>> read() => this._shelf.read();
 
-  Future<String> readAsString([Encoding encoding]) {
-    if (encoding == null) encoding = this.encoding;
-    if (encoding == null) encoding = UTF8;
-    return encoding.decodeStream(this.body);
-  }
+  /// the attributes map
+  Map<String, String> get attributes => {};
 
-  Stream<List<int>> read() {
-    return this.body;
-  }
-
-  int get contentLength {
-    return this._req.contentLength;
-  }
-
-  String get contentType {
-    return this._req.mimeType;
-  }
-
-  String get mimeType {
-    var contentType = _contentType;
-    if (contentType == null) return null;
-    return contentType.mimeType;
-  }
-
-  String get scheme {
-    return this._req.url.scheme;
-  }
-
-  String get host {
-    return this._req.url.host;
-  }
-
-  String get userAgent {
-    return this._req.headers[UserAgent];
-  }
-
-  int get port {
-    return this._req.url.port;
-  }
-
-  String get ip {
-  }
-
-  String get path {
-    return this._req.requestedUri.path;
-  }
-
-  List<String> get cookies {
-    return [];
-  }
-
-  HttpMethod get method {
-    return new HttpMethod._(this._req.method);
-  }
-
-  shelf.Request toShelfRequest() {
-    var headers = <String, String>{};
-    this._req.headers.forEach((k, v) {
-      // Multiple header values are joined with commas.
-      // See http://tools.ietf.org/html/draft-ietf-httpbis-p1-messaging-21#page-22
-      headers[k] = v.join(',');
-    });
-
-    // Remove the Transfer-Encoding header per the adapter requirements.
-    headers.remove(HttpHeaders.TRANSFER_ENCODING);
-
-    void onHijack(void callback(StreamChannel<List<int>> channel)) {
-      this._req.response
-          .detachSocket(writeHeaders: false)
-          .then((socket) => callback(new StreamChannel(socket, socket)));
+  String attribute(String key, [String value]) {
+    if (value == null) {
+      return this.attributes[key];
     }
-
-    return new shelf.Request(this._req.method, this._req.requestedUri,
-        protocolVersion: this._req.protocolVersion,
-        headers: headers,
-        body: this._req,
-        onHijack: onHijack);
+    this.attributes[key] = value;
+    return value;
   }
+
+  /// request body sent by the client
+  Future<String> get body => this.readAsString();
+
+  /// request body as bytes
+  Stream<List<int>> get bodyAsBytes => this.read();
+
+  /// length of request body
+  int get contentLength => this._shelf.contentLength;
+
+  /// content type of request.body
+  String get contentType => this._shelf.mimeType;
+
+  /// // the context path, e.g. "/hello"
+  String get contextPath => this._shelf.url.path;
+
+  /// request cookies sent by the client
+  List<String> get cookies => [];
+
+  /// the HTTP header list
+  Map<String, String> get headers => this._shelf.headers;
+
+  /// the host, e.g. "example.com"
+  String get host => this._shelf.url.host;
+
+  /// client IP address
+  String get ip => "";
+
+  /// value of foo path parameter
+  Map<String, String> get params => {};
+
+  /// the path info
+  String get pathInfo => "";
+
+  /// the server port
+  int get port => this._shelf.url.port;
+
+  /// the protocol
+  String get protocol => this._shelf.url.scheme;
+
+  /// the query map
+  QueryParamsMap get queryMap => new QueryParamsMap.fromParamsList(this.queryParamsList);
+
+  /// the query param
+  Map<String, String> get queryParams => this._shelf.url.queryParameters;
+
+  /// all values of FOO query param
+  Map<String, List<String>> get queryParamsList =>
+      this._shelf.url.queryParametersAll;
+
+  /// The HTTP method (GET, ..etc)
+  HttpMethod get method => new HttpMethod._(this._shelf.method);
+
+  /// "http"
+  String get scheme => this._shelf.url.scheme;
+
+  /// session management
+  dynamic get session => null;
+
+  /// the uri, e.g. "http://example.com/foo"
+  Uri get uri => this._shelf.url;
+
+  /// user agent
+  String get userAgent => this._shelf.headers[userAgent];
+
+  String get path => this._shelf.requestedUri.path;
+
+  shelf.Request get shelfRequest => this._shelf;
 }
