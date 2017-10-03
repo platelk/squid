@@ -1,5 +1,6 @@
 library frost;
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
@@ -14,4 +15,3 @@ part 'src/request.dart';
 part 'src/response.dart';
 part 'src/route/route_entry.dart';
 part 'src/route/routes.dart';
-part 'src/session.dart';

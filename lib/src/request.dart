@@ -4,11 +4,12 @@ const String userAgent = "user-agent";
 
 class Request {
   shelf.Request _shelf;
+  HttpRequest _request;
   Encoding encoding;
 
-  Request.fromShelf(shelf.Request this._shelf);
+  Request(HttpRequest this._request) {
 
-  Request();
+  }
 
   Future<String> readAsString([Encoding encoding]) =>
       this._shelf.readAsString(encoding);
@@ -42,7 +43,7 @@ class Request {
   String get contextPath => this._shelf.url.path;
 
   /// request cookies sent by the client
-  List<String> get cookies => [];
+  List<Cookie> get cookies => this._request?.cookies;
 
   /// the HTTP header list
   Map<String, String> get headers => this._shelf.headers;
@@ -51,7 +52,7 @@ class Request {
   String get host => this._shelf.url.host;
 
   /// client IP address
-  String get ip => "";
+  InternetAddress get ip => this._request.connectionInfo.remoteAddress;
 
   /// value of foo path parameter
   Map<String, String> get params => {};
@@ -82,10 +83,13 @@ class Request {
   String get scheme => this._shelf.url.scheme;
 
   /// session management
-  dynamic get session => null;
+  HttpSession get session => this._request?.session;
 
   /// the uri, e.g. "http://example.com/foo"
   Uri get uri => this._shelf.url;
+
+  // the url. e.g. "http://example.com/foo"
+  Uri get url => this._shelf.url;
 
   /// user agent
   String get userAgent => this._shelf.headers[userAgent];
@@ -93,4 +97,6 @@ class Request {
   String get path => this._shelf.requestedUri.path;
 
   shelf.Request get shelfRequest => this._shelf;
+
+  HttpRequest get request => this._request;
 }
