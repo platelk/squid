@@ -7,9 +7,7 @@ class Request {
   HttpRequest _request;
   Encoding encoding;
 
-  Request(HttpRequest this._request) {
-
-  }
+  Request(HttpRequest this._request);
 
   Future<String> readAsString([Encoding encoding]) =>
       this._shelf.readAsString(encoding);
