@@ -12,11 +12,11 @@ class HttpMethod {
   static const HttpMethod afterAfter = const HttpMethod._("AFTERAFTER");
 
   final String value;
-  
+
   const HttpMethod._(this.value);
 
   @override
-  bool operator==(Object object) {
+  bool operator ==(Object object) {
     if (object is HttpMethod) {
       return object.value == this.value;
     }

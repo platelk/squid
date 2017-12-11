@@ -1,15 +1,16 @@
 part of frost;
 
-typedef Handler = void Function(Request req, Response res);
+typedef HandlerFunc = void Function(Request req, Response res);
 typedef GroupHandler = void Function(Routes group);
 
 class RouteEntry {
   HttpMethod method;
   String path;
   String acceptType;
-  Handler handler;
+  HandlerFunc handler;
 
-  RouteEntry(HttpMethod this.method, String this.path, String acceptType, Handler this.handler);
+  RouteEntry(HttpMethod this.method, String this.path, String acceptType,
+      HandlerFunc this.handler);
 
   void execute(Request req, Response res) {
     if (this.handler != null) {
@@ -26,7 +27,7 @@ class RouteEntry {
   }
 
   @override
-  bool operator==(Object o) {
+  bool operator ==(Object o) {
     if (o is RouteEntry) {
       return this.match(o.method, o.path, o.acceptType);
     }

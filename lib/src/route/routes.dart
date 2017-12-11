@@ -20,15 +20,12 @@ class Routes {
     return null;
   }
 
-  List<RouteEntry> findMultiple(HttpMethod httpMethod, String acceptType, String path) {
+  List<RouteEntry> findMultiple(
+      HttpMethod httpMethod, String acceptType, String path) {
     return null;
   }
 
-  void execute(Request req, Response res) {
+  void execute(Request req, Response res) {}
 
-  }
-
-  void executeMultiple(Request req, Response res) {
-
-  }
+  void executeMultiple(Request req, Response res) {}
 }

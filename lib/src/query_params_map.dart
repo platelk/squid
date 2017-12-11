@@ -7,13 +7,12 @@ class QueryParamsMap {
   List<String> _values = [];
 
   QueryParamsMap();
+
   QueryParamsMap.fromParamsList(Map<String, List<String>> params) {
     this._loadQueryString(params);
   }
 
-  void _loadQueryString(Map<String, List<String>> params) {
-
-  }
+  void _loadQueryString(Map<String, List<String>> params) {}
 
   void loadKeys(String key, List<String> values) {
     var parsed = parseKey(key);
@@ -39,7 +38,7 @@ class QueryParamsMap {
     }
     return null;
   }
-  
+
   String cleanKey(String group) {
     if (group.startsWith("[")) {
       return group.substring(1, group.length - 1);
@@ -64,5 +63,5 @@ class QueryParamsMap {
 
   bool get hasValue => this._values?.isNotEmpty ?? false;
 
-  QueryParamsMap operator[](String key) => this.get(key);
+  QueryParamsMap operator [](String key) => this.get(key);
 }

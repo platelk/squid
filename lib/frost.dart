@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:shelf/shelf.dart' as shelf;
+import 'package:stream_channel/stream_channel.dart';
 
 part 'src/cookies.dart';
 part 'src/default_server.dart';
