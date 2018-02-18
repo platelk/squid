@@ -2,22 +2,31 @@ part of frost;
 
 const String userAgent = "user-agent";
 
+/// [Request] is the representation of an incoming HTTP request
+///
+/// [Request] will provide simple functions to interact with an http incoming request
+/// but will still expose the underlying request for compatibility reasons.
 class Request {
+  /// _shelf is the Shelf representation of an incoming HTTP request.
+  /// It will be created based on [HttpRequest].
   shelf.Request _shelf;
+
+  /// _request is the real underlying incoming http request
   HttpRequest _request;
+
+  /// encoding is the encoding information which will be used for decode the request's body.
+  /// It will be discover by default using HTTP header if not specified.
   Encoding encoding;
 
   Request(HttpRequest this._request) {
     var headers = new Map<String, String>();
     this
         ._request
-        .headers
-        .forEach((key, values) => headers[key] = values.join(","));
+        ?.headers
+        ?.forEach((key, values) => headers[key] = values.join(","));
     this._shelf = new shelf.Request(this._request.method, this._request.uri,
         protocolVersion: this._request.protocolVersion,
         headers: headers,
-        handlerPath: this._request.uri?.toString(),
-        url: this._request.uri,
         body: this._request,
         onHijack: this._onHijack);
   }
@@ -71,9 +80,6 @@ class Request {
   /// value of foo path parameter
   Map<String, String> get params => {};
 
-  /// the path info
-  String get pathInfo => "";
-
   /// the server port
   int get port => this._request.uri?.port;
 
@@ -92,7 +98,7 @@ class Request {
       this._shelf?.url?.queryParametersAll;
 
   /// The HTTP method (GET, ..etc)
-  HttpMethod get method => new HttpMethod._(this._request.method);
+  HttpMethod get method => new HttpMethod.parse(this._request.method);
 
   /// "http"
   String get scheme => this._request.uri?.scheme;
@@ -103,7 +109,7 @@ class Request {
   /// the uri, e.g. "http://example.com/foo"
   Uri get uri => this._request.uri;
 
-  // the url. e.g. "http://example.com/foo"
+  /// the url. e.g. "http://example.com/foo"
   Uri get url => this._shelf?.url;
 
   /// user agent

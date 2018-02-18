@@ -1,19 +1,19 @@
 part of frost;
 
 class HttpMethod {
-  static const HttpMethod get = const HttpMethod._("GET");
-  static const HttpMethod post = const HttpMethod._("POST");
-  static const HttpMethod put = const HttpMethod._("PUT");
-  static const HttpMethod delete = const HttpMethod._("DELETE");
-  static const HttpMethod options = const HttpMethod._("OPTIONS");
+  static const HttpMethod get = const HttpMethod.parse("GET");
+  static const HttpMethod post = const HttpMethod.parse("POST");
+  static const HttpMethod put = const HttpMethod.parse("PUT");
+  static const HttpMethod delete = const HttpMethod.parse("DELETE");
+  static const HttpMethod options = const HttpMethod.parse("OPTIONS");
 
-  static const HttpMethod before = const HttpMethod._("BEFORE");
-  static const HttpMethod after = const HttpMethod._("AFTER");
-  static const HttpMethod afterAfter = const HttpMethod._("AFTERAFTER");
+  static const HttpMethod before = const HttpMethod.parse("BEFORE");
+  static const HttpMethod after = const HttpMethod.parse("AFTER");
+  static const HttpMethod afterAfter = const HttpMethod.parse("AFTERAFTER");
 
   final String value;
 
-  const HttpMethod._(this.value);
+  const HttpMethod.parse(this.value);
 
   @override
   bool operator ==(Object object) {
