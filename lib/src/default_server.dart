@@ -1,6 +1,6 @@
 part of frost;
 
-var DefaultServer = new FrostServer();
+var DefaultServer = new Server();
 
 void start() {
   DefaultServer.start();
@@ -39,6 +39,6 @@ void options({String path, HandlerFunc handler, String acceptType: "*/*"}) {
   DefaultServer.options(path: path, handler: handler, acceptType: acceptType);
 }
 
-void path(String path, GroupHandler groupHandler) {
-  DefaultServer.path(path, groupHandler);
+void patch({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+  DefaultServer.patch(path: path, handler: handler, acceptType: acceptType);
 }

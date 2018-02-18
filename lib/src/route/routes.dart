@@ -1,31 +1,66 @@
 part of frost;
 
 class Routes {
-  List<RouteEntry> routes;
   String path;
+  List<Route> _routes = [];
 
-  Routes({this.path}) {
-    this.path ??= "";
+  Routes(this.path);
 
-    this.routes = <RouteEntry>[];
+  void serve(Request req, Response res) {
+    for (var route in this._routes) {
+      if (route.match(req.method, req.path, req.contentType)) {
+        route.serve(req, res);
+      }
+    }
   }
 
-  void add(RouteEntry routeEntry) => routes.add(routeEntry);
-
-  bool match(HttpMethod httpMethod, String acceptType, String path) {
-    return this.find(httpMethod, acceptType, path) != null;
+  void add(Route r) {
+    this._routes.add(r);
   }
 
-  RouteEntry find(HttpMethod httpMethod, String acceptType, String path) {
-    return null;
+  void before({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.before, acceptType: acceptType));
   }
 
-  List<RouteEntry> findMultiple(
-      HttpMethod httpMethod, String acceptType, String path) {
-    return null;
+  void after({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.after, acceptType: acceptType));
   }
 
-  void execute(Request req, Response res) {}
+  void afterAfter(
+      {String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.afterAfter, acceptType: acceptType));
+  }
 
-  void executeMultiple(Request req, Response res) {}
+  void get({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.get, acceptType: acceptType));
+  }
+
+  void post({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.post, acceptType: acceptType));
+  }
+
+  void put({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.put, acceptType: acceptType));
+  }
+
+  void delete({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.delete, acceptType: acceptType));
+  }
+
+  void options({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.options, acceptType: acceptType));
+  }
+
+  void patch({String path, HandlerFunc handler, String acceptType: "*/*"}) {
+    this.add(
+        new Route(this.path + path, handler, method: HttpMethod.patch, acceptType: acceptType));
+  }
 }

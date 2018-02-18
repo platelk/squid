@@ -1,6 +1,7 @@
 part of frost;
 
-const String userAgent = "user-agent";
+const String pathParamsSep = ':';
+const String uriPathSep = '/';
 
 /// [Request] is the representation of an incoming HTTP request
 ///
@@ -14,11 +15,17 @@ class Request {
   /// _request is the real underlying incoming http request
   HttpRequest _request;
 
+  /// _params hold the parsed query parameters based on the [contextPath]
+  Map<String, String> _params;
+
   /// encoding is the encoding information which will be used for decode the request's body.
   /// It will be discover by default using HTTP header if not specified.
   Encoding encoding;
 
-  Request(HttpRequest this._request) {
+  /// contextPath is the original path which triggered the handler. e.g "/hello/:param"
+  String contextPath;
+
+  Request(HttpRequest this._request, {String this.contextPath}) {
     var headers = new Map<String, String>();
     this
         ._request
@@ -60,10 +67,7 @@ class Request {
   int get contentLength => this._request.contentLength;
 
   /// content type of request.body
-  ContentType get contentType => this._request.headers?.contentType;
-
-  /// // the context path, e.g. "/hello"
-  String get contextPath => this._request.uri?.path;
+  ContentType get contentType => this._request.headers?.contentType ?? ContentType.TEXT;
 
   /// request cookies sent by the client
   List<Cookie> get cookies => this._request.cookies;
@@ -78,7 +82,32 @@ class Request {
   InternetAddress get ip => this._request.connectionInfo?.remoteAddress;
 
   /// value of foo path parameter
-  Map<String, String> get params => {};
+  String param(String name) => this.params[name];
+
+  /// params will return all the params
+  Map<String, String> get params => this._params ?? this._parseParams();
+
+  Map<String, String> _parseParams() {
+    this._params = <String, String>{};
+    if (this.contextPath == null) {
+      return this._params;
+    }
+    var j = 0;
+    for (var i = 0; i < this.contextPath.length; i++, j++) {
+      if (this.contextPath[i] == pathParamsSep) {
+        var n = "";
+        for (i += 1; i < this.contextPath.length && this.contextPath[i] != uriPathSep; i++) {
+          n += this.contextPath[i];
+        }
+        var val = "";
+        for (; j < this.path.length && this.path[j] != uriPathSep; j++) {
+          val += this.path[j];
+        }
+        this._params[n] = val;
+      }
+    }
+    return this._params;
+  }
 
   /// the server port
   int get port => this._request.uri?.port;
@@ -87,8 +116,9 @@ class Request {
   String get protocol => this._request.uri?.scheme;
 
   /// the query map
-  QueryParamsMap get queryMap =>
-      new QueryParamsMap.fromParamsList(this.queryParamsList);
+  // Looks like incompatible with Uri.parse, need to look further on this.
+  //  QueryParamsMap get queryMap =>
+  //      new QueryParamsMap.fromParamsList(this.queryParamsList);
 
   /// the query param
   Map<String, String> get queryParams => this._shelf?.url?.queryParameters;
@@ -113,7 +143,7 @@ class Request {
   Uri get url => this._shelf?.url;
 
   /// user agent
-  String get userAgent => this.headers.value(userAgent);
+  String get userAgent => this.headers.value(HttpHeaders.USER_AGENT);
 
   String get path => this._shelf?.requestedUri?.path;
 

@@ -3,8 +3,6 @@ import "package:test/test.dart";
 
 import "./http_mock.dart";
 
-import 'dart:io';
-
 void main() {
   group("Basic creation", () {
     test("Create request from HttpRequest.", () {
@@ -12,7 +10,6 @@ void main() {
       var req = new Request(mock);
       expect(req, isNotNull);
     });
-    
   });
   // req.protocol
   group("Parsing protocol", () {
@@ -102,27 +99,101 @@ void main() {
   // req.body
   group("Retrieve body from request:", () {
     test("get simple body", () async {
-      var mock = new MockHttpRequest(Uri.parse("http://localhost/"), body: "test".runes.toList(), method: HttpMethod.post.value);
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "test".runes.toList(), method: HttpMethod.post.value);
       var req = new Request(mock);
       expect(await req.body, equals("test"));
     });
     test("emtpy body", () async {
-      var mock = new MockHttpRequest(Uri.parse("http://localhost/"), body: "".runes.toList(), method: HttpMethod.post.value);
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "".runes.toList(), method: HttpMethod.post.value);
       var req = new Request(mock);
       expect(await req.body, equals(""));
+    });
+  });
+  // req.bodyAsByte
+  group("Retrieve body as byte from request:", () {
+    test("get simple body", () async {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "test".runes.toList(), method: HttpMethod.post.value);
+      var req = new Request(mock);
+      var result = <int>[];
+      await for (var data in req.bodyAsBytes) {
+        result.addAll(data);
+      }
+      expect(result, "test".runes.toList());
+    });
+    test("emtpy body", () async {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "".runes.toList(), method: HttpMethod.post.value);
+      var req = new Request(mock);
+      var result = <int>[];
+      await for (var data in req.bodyAsBytes) {
+        result.addAll(data);
+      }
+      expect(result, <int>[]);
     });
   });
   // req.contentLength
   group("Retrieve content length from request:", () {
     test("get from simple body", () async {
-      var mock = new MockHttpRequest(Uri.parse("http://localhost/"), body: "test".runes.toList(), method: HttpMethod.post.value);
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "test".runes.toList(), method: HttpMethod.post.value);
       var req = new Request(mock);
       expect(req.contentLength, equals(4));
     });
     test("emtpy body", () async {
-      var mock = new MockHttpRequest(Uri.parse("http://localhost/"), body: "".runes.toList(), method: HttpMethod.post.value);
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "".runes.toList(), method: HttpMethod.post.value);
       var req = new Request(mock);
       expect(req.contentLength, equals(0));
+    });
+  });
+  // req.contentType
+  group("Retrieve content type from reauest", () {
+    test("get default content type", () {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "".runes.toList(), method: HttpMethod.post.value);
+      var req = new Request(mock);
+      expect(req.contentType.mimeType, "text/plain");
+    });
+    test("get content-type from header", () {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"),
+          body: "".runes.toList(), method: HttpMethod.post.value);
+      mock.headers.set("content-type", "application/json");
+      var req = new Request(mock);
+      expect(req.contentType.mimeType, equals("application/json"));
+    });
+  });
+  // req.params
+  group("Retrieve path", () {
+    test("with simple path", () {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/"));
+      var req = new Request(mock);
+      expect(req.path, equals("/"));
+    });
+    test("with provided path", () {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/test"));
+      var req = new Request(mock);
+      expect(req.path, equals("/test"));
+    });
+  });
+  group("Retrieve param from path", () {
+    test("with no params", () {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/test"));
+      var req = new Request(mock);
+      expect(req.param("unknown"), isNull);
+    });
+    test("with simple params", () {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/9/list"));
+      var req = new Request(mock, contextPath: "/:id/list");
+      expect(req.param("id"), "9");
+    });
+    test("with multiple params", () {
+      var mock = new MockHttpRequest(Uri.parse("http://localhost/9/list"));
+      var req = new Request(mock, contextPath: "/:id/:verb");
+      expect(req.param("id"), equals("9"));
+      expect(req.param("verb"), equals("list"));
     });
   });
 }

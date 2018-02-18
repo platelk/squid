@@ -15,7 +15,6 @@ class MockHttpHeaders implements HttpHeaders {
   @override
   int get contentLength => int.parse(_headers[HttpHeaders.CONTENT_LENGTH][0]);
 
-
   @override
   DateTime get ifModifiedSince {
     List<String> values = _headers[HttpHeaders.IF_MODIFIED_SINCE];
@@ -37,7 +36,13 @@ class MockHttpHeaders implements HttpHeaders {
   }
 
   @override
-  ContentType contentType;
+  ContentType get contentType {
+    var values = _headers[HttpHeaders.CONTENT_TYPE];
+    if (values != null) {
+      return ContentType.parse(values.first);
+    }
+    return null;
+  }
 
   @override
   void set(String name, Object value) {
@@ -155,6 +160,13 @@ class MockHttpRequest implements HttpRequest {
   @override
   Stream<S> transform<S>(StreamTransformer<List<int>, S> streamTransformer) {
     return streamTransformer.bind(new Stream.fromIterable([body]));
+  }
+
+  @override
+  StreamSubscription<List<int>> listen(void onData(List<int> onData),
+      {Function onError, void onDone(), bool cancelOnError}) {
+    var ss = new Stream<List<int>>.fromIterable([body]);
+    return ss.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
   /*

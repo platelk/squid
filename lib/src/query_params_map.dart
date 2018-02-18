@@ -12,7 +12,9 @@ class QueryParamsMap {
     this._loadQueryString(params);
   }
 
-  void _loadQueryString(Map<String, List<String>> params) {}
+  void _loadQueryString(Map<String, List<String>> params) {
+    params.forEach((k, v) => this.loadKeys(k, v));
+  }
 
   void loadKeys(String key, List<String> values) {
     var parsed = parseKey(key);
