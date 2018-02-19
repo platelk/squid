@@ -3,7 +3,7 @@ part of frost;
 class Response {
   HttpResponse _response;
 
-  Response();
+  Response(this._response);
 
   /// get response content
   dynamic get body => this._response;

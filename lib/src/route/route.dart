@@ -3,31 +3,51 @@ part of frost;
 typedef HandlerFunc = void Function(Request req, Response res);
 typedef GroupHandler = void Function(Server group);
 
-class Route {
+abstract class RouteMatcher {
+  bool match(HttpMethod httpMethod, String path, ContentType contentType);
+
+  void serve(Request req, Response res);
+}
+
+class Route implements RouteMatcher {
   HttpMethod method;
   String path;
   String acceptType;
   AcceptType _acceptTypes;
   HandlerFunc handler;
 
-  Route(String this.path, HandlerFunc this.handler, {HttpMethod this.method = HttpMethod.get, String this.acceptType = "*/*"}) {
+  Route(String this.path, HandlerFunc this.handler,
+      {HttpMethod this.method = HttpMethod.get,
+      String this.acceptType = "*/*"}) {
+    if (!this.path.startsWith("/")) {
+      throw new FormatException("path in route must start with '/'", this.path, 0);
+    }
+    if (this.path.length > 1 && this.path.endsWith("/")) {
+      throw new FormatException("path in route must not end with '/'", this.path, this.path.length);
+    }
     this._acceptTypes = new AcceptType.parse(this.acceptType);
   }
 
+  @override
   void serve(Request req, Response res) {
     if (this.handler != null) {
       this.handler(req, res);
     }
   }
 
+  @override
   bool match(HttpMethod httpMethod, String path, ContentType contentType) {
-    return this.method == httpMethod && this._acceptTypes.match(contentType) && _matchPath(path);
+    return this.method == httpMethod &&
+        this._acceptTypes.match(contentType) &&
+        _matchPath(path);
   }
 
   @override
   bool operator ==(Object o) {
     if (o is Route) {
-      return this.method == o.method && this.path == o.path && this.acceptType == o.acceptType;
+      return this.method == o.method &&
+          this.path == o.path &&
+          this.acceptType == o.acceptType;
     }
     return false;
   }
