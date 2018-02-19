@@ -32,6 +32,8 @@ class Route implements RouteMatcher {
   @override
   void serve(Request req, Response res) {
     if (this.handler != null) {
+      // Provide which context trigger the handler
+      req.contextPath = this.contextPath;
       this.handler(req, res);
     }
   }
