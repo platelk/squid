@@ -9,7 +9,7 @@ void main() {
       var r = new Route("/", (req, res) => "");
       expect(r.acceptType, equals("*/*"));
       expect(r.method, equals(HttpMethod.get));
-      expect(r.path, equals("/"));
+      expect(r.contextPath.contextPath, equals("/"));
     });
   });
   group("Route equality", () {
@@ -60,6 +60,18 @@ void main() {
     test("with right primary content type and specific accept type", () {
       var r1 = new Route("/test", (req, res) => "", acceptType: "application/*");
       expect(r1.match(HttpMethod.get, "/test", ContentType.JSON), isTrue);
+    });
+    test("with path trap", () {
+      var r1 = new Route("/*", (req, res) => "");
+      expect(r1.match(HttpMethod.get, "/test", null), isTrue);
+    });
+    test("with path trap at the end", () {
+      var r1 = new Route("/user/*", (req, res) => "");
+      expect(r1.match(HttpMethod.get, "/user/me/test", null), isTrue);
+    });
+    test("with path trap at the end and params", () {
+      var r1 = new Route("/user/:id/*", (req, res) => "");
+      expect(r1.match(HttpMethod.get, "/user/9/test", null), isTrue);
     });
   });
 }

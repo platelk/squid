@@ -1,7 +1,5 @@
 part of frost;
 
-const String pathParamsSep = ':';
-const String uriPathSep = '/';
 
 /// [Request] is the representation of an incoming HTTP request
 ///
@@ -23,9 +21,10 @@ class Request {
   Encoding encoding;
 
   /// contextPath is the original path which triggered the handler. e.g "/hello/:param"
-  String contextPath;
+  Path contextPath;
 
-  Request(HttpRequest this._request, {String this.contextPath}) {
+  Request(HttpRequest this._request, {String contextPath}) {
+    this.contextPath = new Path(contextPath);
     var headers = new Map<String, String>();
     this
         ._request
@@ -88,24 +87,7 @@ class Request {
   Map<String, String> get params => this._params ?? this._parseParams();
 
   Map<String, String> _parseParams() {
-    this._params = <String, String>{};
-    if (this.contextPath == null) {
-      return this._params;
-    }
-    var j = 0;
-    for (var i = 0; i < this.contextPath.length; i++, j++) {
-      if (this.contextPath[i] == pathParamsSep) {
-        var n = "";
-        for (i += 1; i < this.contextPath.length && this.contextPath[i] != uriPathSep; i++) {
-          n += this.contextPath[i];
-        }
-        var val = "";
-        for (; j < this.path.length && this.path[j] != uriPathSep; j++) {
-          val += this.path[j];
-        }
-        this._params[n] = val;
-      }
-    }
+    this._params ??= this.contextPath.extractParams(this.path);
     return this._params;
   }
 
