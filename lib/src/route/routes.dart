@@ -1,10 +1,10 @@
 part of frost;
 
-class Routes implements RouteMatcher {
+class Routes extends Route {
   String path;
-  List<RouteMatcher> _routes = [];
+  List<Route> _routes = [];
 
-  Routes(String this.path) {
+  Routes(String this.path) : super("", (req, res) => "") {
     if (this.path.length >= 1 && this.path[this.path.length - 1] == '/') {
       throw new FormatException("path in group shouldn't end with '/'",
           this.path, this.path.length - 1);
@@ -16,6 +16,7 @@ class Routes implements RouteMatcher {
     for (var route in this._routes) {
       if (route.match(req.method, req.path, req.contentType)) {
         route.serve(req, res);
+        return;
       }
     }
   }
@@ -30,30 +31,38 @@ class Routes implements RouteMatcher {
     return false;
   }
 
-  void add(RouteMatcher r) {
+  void add(Route r) {
     this._routes.add(r);
   }
 
   Routes group(String path) {
-    var grp = new Routes(this.path+path);
+    var grp = new Routes(this.path + path);
     this.add(grp);
     return grp;
   }
 
-  void before(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
-    this.add(new Route(this.path + path, handler,
-        method: HttpMethod.before, acceptType: acceptType));
+  void before(HandlerFunc handler) {
+    this.use((HandlerFunc h) {
+      return (req, res) {
+        handler(req, res);
+        h(req, res);
+      };
+    });
   }
 
-  void after(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
-    this.add(new Route(this.path + path, handler,
-        method: HttpMethod.after, acceptType: acceptType));
+  void after(HandlerFunc handler) {
+    this.use((HandlerFunc h) {
+      return (req, res) {
+        h(req, res);
+        handler(req, res);
+      };
+    });
   }
 
-  void afterAfter(
-      String path, HandlerFunc handler, {String acceptType: "*/*"}) {
-    this.add(new Route(this.path + path, handler,
-        method: HttpMethod.afterAfter, acceptType: acceptType));
+  void use(Handler middleware) {
+    for (int i = 0; i < this._routes.length; i++) {
+      this._routes[i].handler = middleware(this._routes[i].handler);
+    }
   }
 
   void get(String path, HandlerFunc handler, {String acceptType: "*/*"}) {

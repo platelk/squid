@@ -6,17 +6,16 @@ void start() {
   DefaultServer.start();
 }
 
-void before(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
-  DefaultServer.before(path, handler, acceptType: acceptType);
+void before(HandlerFunc handler) {
+  DefaultServer.before(handler);
 }
 
-void after(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
-  DefaultServer.after(path, handler, acceptType: acceptType);
+void after(HandlerFunc handler) {
+  DefaultServer.after(handler);
 }
 
-void afterAfter(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
-  DefaultServer.afterAfter(
-      path, handler, acceptType: acceptType);
+void use(Handler handler) {
+  DefaultServer.use(handler);
 }
 
 void get(String path, HandlerFunc handler, {String acceptType: "*/*"}) {

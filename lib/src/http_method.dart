@@ -8,10 +8,6 @@ class HttpMethod {
   static const HttpMethod delete = const HttpMethod.parse("DELETE");
   static const HttpMethod options = const HttpMethod.parse("OPTIONS");
 
-  static const HttpMethod before = const HttpMethod.parse("BEFORE");
-  static const HttpMethod after = const HttpMethod.parse("AFTER");
-  static const HttpMethod afterAfter = const HttpMethod.parse("AFTERAFTER");
-
   final String value;
 
   const HttpMethod.parse(this.value);
