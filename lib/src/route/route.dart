@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 typedef HandlerFunc = void Function(Request req, Response res);
 

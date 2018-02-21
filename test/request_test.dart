@@ -1,4 +1,4 @@
-import 'package:frost/frost.dart';
+import 'package:sting/sting.dart';
 import "package:test/test.dart";
 
 import "./http_mock.dart";
@@ -6,7 +6,7 @@ import "./http_mock.dart";
 void main() {
   group("Basic creation", () {
     test("Create request from HttpRequest.", () {
-      var mock = new MockHttpRequest(Uri.parse("http://test.frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("http://test.sting.io/"));
       var req = new Request(mock);
       expect(req, isNotNull);
     });
@@ -14,22 +14,22 @@ void main() {
   // req.protocol
   group("Parsing protocol", () {
     test("http", () {
-      var mock = new MockHttpRequest(Uri.parse("http://test.frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("http://test.sting.io/"));
       var req = new Request(mock);
       expect(req.protocol, equals("http"));
     });
     test("https", () {
-      var mock = new MockHttpRequest(Uri.parse("https://test.frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("https://test.sting.io/"));
       var req = new Request(mock);
       expect(req.protocol, equals("https"));
     });
     test("ws", () {
-      var mock = new MockHttpRequest(Uri.parse("ws://test.frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("ws://test.sting.io/"));
       var req = new Request(mock);
       expect(req.protocol, equals("ws"));
     });
     test("wss", () {
-      var mock = new MockHttpRequest(Uri.parse("wss://test.frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("wss://test.sting.io/"));
       var req = new Request(mock);
       expect(req.protocol, equals("wss"));
     });
@@ -37,14 +37,14 @@ void main() {
   // req.host
   group("Parsing host", () {
     test("in simple case", () {
-      var mock = new MockHttpRequest(Uri.parse("http://frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("http://sting.io/"));
       var req = new Request(mock);
-      expect(req.host, equals("frost.io"));
+      expect(req.host, equals("sting.io"));
     });
     test("with sub domains", () {
-      var mock = new MockHttpRequest(Uri.parse("https://test.frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("https://test.sting.io/"));
       var req = new Request(mock);
-      expect(req.host, equals("test.frost.io"));
+      expect(req.host, equals("test.sting.io"));
     });
     test("without extension (localhost)", () {
       var mock = new MockHttpRequest(Uri.parse("https://localhost/"));
@@ -60,12 +60,12 @@ void main() {
   // req.port
   group("Parsing port", () {
     test("specified in url", () {
-      var mock = new MockHttpRequest(Uri.parse("http://frost.io:8080/"));
+      var mock = new MockHttpRequest(Uri.parse("http://sting.io:8080/"));
       var req = new Request(mock);
       expect(req.port, equals(8080));
     });
     test("in https request", () {
-      var mock = new MockHttpRequest(Uri.parse("https://test.frost.io/"));
+      var mock = new MockHttpRequest(Uri.parse("https://test.sting.io/"));
       var req = new Request(mock);
       expect(req.port, equals(443));
     });

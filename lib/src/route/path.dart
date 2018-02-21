@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 const String pathParamsSep = ':';
 const String uriPathSep = '/';

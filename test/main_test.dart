@@ -1,10 +1,10 @@
 import "package:test/test.dart";
 
-import 'package:frost/frost.dart' as frost;
+import 'package:sting/sting.dart' as sting;
 
 void main() {
   test("Create simple route hierachy", () {
-    frost.get("/plop", (req, res) => "hello");
-    frost.start();
+    sting.get("/plop", (req, res) => "hello");
+    sting.start();
   });
 }

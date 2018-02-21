@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 class AcceptType {
   Map<ContentType, double> _acceptTypes = {};

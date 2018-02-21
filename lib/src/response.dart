@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 class Response {
   HttpResponse _response;

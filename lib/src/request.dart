@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 
 /// [Request] is the representation of an incoming HTTP request

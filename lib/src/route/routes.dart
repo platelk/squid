@@ -1,10 +1,10 @@
-part of frost;
+part of sting;
 
 class Routes extends Route {
   String path;
   List<Route> _routes = [];
 
-  Routes(String this.path) : super("", (req, res) => "") {
+  Routes(String this.path) : super("/", (req, res) => "") {
     if (this.path.length >= 1 && this.path[this.path.length - 1] == '/') {
       throw new FormatException("path in group shouldn't end with '/'",
           this.path, this.path.length - 1);

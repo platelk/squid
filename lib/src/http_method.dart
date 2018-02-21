@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 class HttpMethod {
   static const HttpMethod get = const HttpMethod.parse("GET");

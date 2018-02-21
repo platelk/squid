@@ -1,4 +1,4 @@
-import 'package:frost/frost.dart';
+import 'package:sting/sting.dart';
 import "package:test/test.dart";
 
 import "./http_mock.dart";

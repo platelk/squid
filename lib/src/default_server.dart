@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 var DefaultServer = new Server();
 

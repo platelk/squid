@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 class QueryParamsMap {
   final RegExp keyPattern = new RegExp("\\A[\\[\\]]*([^\\[\\]]+)\\]*");

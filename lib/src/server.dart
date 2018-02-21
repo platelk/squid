@@ -1,4 +1,4 @@
-part of frost;
+part of sting;
 
 const int defaultPort = 8080;
 const String defaultHost = "0.0.0.0";
