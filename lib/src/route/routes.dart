@@ -3,6 +3,7 @@ part of sting;
 class Routes extends Route {
   String path;
   List<Route> _routes = [];
+  Handler middleware = (h) => h;
 
   Routes(String this.path) : super("/", (req, res) => "") {
     if (this.path.length >= 1 && this.path[this.path.length - 1] == '/') {
@@ -32,6 +33,7 @@ class Routes extends Route {
   }
 
   void add(Route r) {
+    r.handler = this.middleware(r.handler);
     this._routes.add(r);
   }
 
@@ -60,6 +62,8 @@ class Routes extends Route {
   }
 
   void use(Handler middleware) {
+    var prevMiddleware = this.middleware;
+    this.middleware = (h) => prevMiddleware(middleware(h));
     for (int i = 0; i < this._routes.length; i++) {
       this._routes[i].handler = middleware(this._routes[i].handler);
     }
