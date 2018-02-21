@@ -4,13 +4,20 @@ const int defaultPort = 8080;
 const String defaultHost = "0.0.0.0";
 
 class Server extends Routes {
-  int port;
-  String host;
   HttpServer _server;
-  Server({String this.host : defaultHost, int this.port: defaultPort}) : super("");
 
-  Future<Server> start() async {
-    this._server = await HttpServer.bind(this.host, this.port);
+  Server() : super("");
+
+  Future<Server> start(String host, int port) async {
+    this._server = await HttpServer.bind(host, port, shared: true);
+    this._loop();
+    return this;
+  }
+
+  Future<Server> startSecure(
+      String host, int port, SecurityContext context) async {
+    this._server =
+        await HttpServer.bindSecure(host, port, context, shared: true);
     this._loop();
     return this;
   }

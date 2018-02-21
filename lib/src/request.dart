@@ -1,6 +1,5 @@
 part of sting;
 
-
 /// [Request] is the representation of an incoming HTTP request
 ///
 /// [Request] will provide simple functions to interact with an http incoming request
@@ -30,7 +29,7 @@ class Request {
         ._request
         ?.headers
         ?.forEach((key, values) => headers[key] = values.join(","));
-    this._shelf = new shelf.Request(this._request.method, this._request.uri,
+    this._shelf = new shelf.Request(this._request.method, this._request.requestedUri,
         protocolVersion: this._request.protocolVersion,
         headers: headers,
         body: this._request,
@@ -66,7 +65,8 @@ class Request {
   int get contentLength => this._request.contentLength;
 
   /// content type of request.body
-  ContentType get contentType => this._request.headers?.contentType ?? ContentType.TEXT;
+  ContentType get contentType =>
+      this._request.headers?.contentType ?? ContentType.TEXT;
 
   /// request cookies sent by the client
   List<Cookie> get cookies => this._request.cookies;

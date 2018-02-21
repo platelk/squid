@@ -2,8 +2,8 @@ part of sting;
 
 var DefaultServer = new Server();
 
-void start() {
-  DefaultServer.start();
+void start(String host, int port) {
+  DefaultServer.start(host, port);
 }
 
 void before(HandlerFunc handler) {
@@ -40,4 +40,11 @@ void options(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
 
 void patch(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
   DefaultServer.patch(path, handler, acceptType: acceptType);
+}
+
+void path(String path, Function group) {
+  String previousPath = DefaultServer.path;
+  DefaultServer.path = previousPath+path;
+  group();
+  DefaultServer.path = previousPath;
 }
