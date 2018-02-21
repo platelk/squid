@@ -1,4 +1,11 @@
 name: sting
+version: 0.0.1
+description: >
+  Sting is an light HTTP server package inspired by Go and HTTP Spark
+author: PLATEL Kevin <platel.kevin@gmail.com>
+homepage: https://github.com/platelk/sting
+environment:
+    sdk: ">=1.8.0 <2.0.0"
 dependencies:
   shelf: "^0.7.2"
   stream_channel: "^1.6.3"
