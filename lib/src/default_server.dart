@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 var DefaultServer = new Server();
 

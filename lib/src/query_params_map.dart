@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 class QueryParamsMap {
   final RegExp keyPattern = new RegExp("\\A[\\[\\]]*([^\\[\\]]+)\\]*");

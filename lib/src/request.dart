@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 /// [Request] is the representation of an incoming HTTP request
 ///
@@ -29,8 +29,9 @@ class Request {
         ._request
         ?.headers
         ?.forEach((key, values) => headers[key] = values.join(","));
-    this._shelf = new shelf.Request(this._request.method, this._request.requestedUri,
-        protocolVersion: this._request.protocolVersion,
+    this._shelf = new shelf.Request(this._request?.method, this._request?.requestedUri,
+        handlerPath: this._request?.requestedUri?.path ?? "/",
+        protocolVersion: this._request?.protocolVersion,
         headers: headers,
         body: this._request,
         onHijack: this._onHijack);

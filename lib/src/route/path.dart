@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 const String pathParamsSep = ':';
 const String uriPathSep = '/';

@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 class Response {
   HttpResponse _response;

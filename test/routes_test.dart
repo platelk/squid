@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 
-import 'package:sting/sting.dart';
+import 'package:squid/squid.dart';
 import "package:test/test.dart";
 
 void main() {

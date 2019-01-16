@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 typedef HandlerFunc = void Function(Request req, Response res);
 

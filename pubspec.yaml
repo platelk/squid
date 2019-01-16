@@ -1,15 +1,16 @@
-name: sting
+name: squid
 version: 0.0.1
 description: >
   Sting is an light HTTP server package inspired by Go and HTTP Spark
 author: PLATEL Kevin <platel.kevin@gmail.com>
 homepage: https://github.com/platelk/sting
 environment:
-    sdk: ">=1.8.0 <2.0.0"
+    sdk: ">=2.0.0 <3.0.0"
 dependencies:
-  shelf: "^0.7.2"
-  stream_channel: "^1.6.3"
-  mime: "^0.9.5"
+  shelf: "^0.7.4"
+  stream_channel: "^1.6.8"
+  mime: "^0.9.6+2"
 dev_dependencies:
   grinder: any
-  test: "^0.12.30+1"
+  test: ^1.5.1+1
+  mockito: ^4.0.0

@@ -1,4 +1,4 @@
-library sting;
+library squid;
 
 import 'dart:async';
 import 'dart:convert';
@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:stream_channel/stream_channel.dart';
 
-part 'package:sting/src/server.dart';
+part 'package:squid/src/server.dart';
 
 part 'src/accept_type.dart';
 

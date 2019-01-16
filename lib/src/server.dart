@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 const int defaultPort = 8080;
 const String defaultHost = "0.0.0.0";

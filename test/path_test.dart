@@ -1,4 +1,4 @@
-import 'package:sting/sting.dart';
+import 'package:squid/squid.dart';
 import "package:test/test.dart";
 
 import "./http_mock.dart";

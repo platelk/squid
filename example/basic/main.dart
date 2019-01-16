@@ -1,4 +1,4 @@
-import 'package:sting/sting.dart';
+import 'package:squid/squid.dart';
 
 void main() {
   use((HandlerFunc h) {

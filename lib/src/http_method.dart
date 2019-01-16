@@ -1,4 +1,4 @@
-part of sting;
+part of squid;
 
 class HttpMethod {
   static const HttpMethod get = const HttpMethod.parse("GET");
