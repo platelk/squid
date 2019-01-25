@@ -1,9 +1,9 @@
 part of squid;
 
 class Response {
-  HttpResponse _response;
-
   Response(this._response);
+
+  HttpResponse _response;
 
   /// get response content
   dynamic get body => this._response;

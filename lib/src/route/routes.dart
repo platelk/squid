@@ -11,6 +11,8 @@ class Routes extends Route {
           this.path, this.path.length - 1);
     }
   }
+  
+  List<Route> get routes => new List.from(this._routes, growable: false);
 
   @override
   void serve(Request req, Response res) {

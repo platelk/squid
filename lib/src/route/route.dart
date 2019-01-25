@@ -11,12 +11,6 @@ abstract class RouteMatcher {
 }
 
 class Route implements RouteMatcher {
-  HttpMethod method;
-  Path contextPath;
-  String acceptType;
-  AcceptType _acceptTypes;
-  HandlerFunc handler;
-
   Route(String contextPath, HandlerFunc this.handler,
       {HttpMethod this.method = HttpMethod.get,
       String this.acceptType = "*/*"}) {
@@ -29,6 +23,12 @@ class Route implements RouteMatcher {
     this._acceptTypes = new AcceptType.parse(this.acceptType);
     this.contextPath = new Path(contextPath);
   }
+
+  HttpMethod method;
+  Path contextPath;
+  String acceptType;
+  AcceptType _acceptTypes;
+  HandlerFunc handler;
 
   @override
   void serve(Request req, Response res) {
@@ -54,5 +54,10 @@ class Route implements RouteMatcher {
           this.acceptType == o.acceptType;
     }
     return false;
+  }
+  
+  @override
+  String toString() {
+    return "[${this.method.value} ${this.contextPath}]";
   }
 }

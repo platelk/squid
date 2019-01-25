@@ -5,6 +5,18 @@ part of squid;
 /// [Request] will provide simple functions to interact with an http incoming request
 /// but will still expose the underlying request for compatibility reasons.
 class Request {
+  Request(HttpRequest this._request, {String contextPath}) {
+    this.contextPath = new Path(contextPath);
+    var headers = new Map<String, String>();
+    this._request?.headers?.forEach((key, values) => headers[key] = values.join(","));
+    this._shelf = new shelf.Request(this._request?.method, this._request?.requestedUri,
+        handlerPath: this._request?.requestedUri?.path ?? "/",
+        protocolVersion: this._request?.protocolVersion,
+        headers: headers,
+        body: this._request,
+        onHijack: this._onHijack);
+  }
+
   /// _shelf is the Shelf representation of an incoming HTTP request.
   /// It will be created based on [HttpRequest].
   shelf.Request _shelf;
@@ -22,23 +34,7 @@ class Request {
   /// contextPath is the original path which triggered the handler. e.g "/hello/:param"
   Path contextPath;
 
-  Request(HttpRequest this._request, {String contextPath}) {
-    this.contextPath = new Path(contextPath);
-    var headers = new Map<String, String>();
-    this
-        ._request
-        ?.headers
-        ?.forEach((key, values) => headers[key] = values.join(","));
-    this._shelf = new shelf.Request(this._request?.method, this._request?.requestedUri,
-        handlerPath: this._request?.requestedUri?.path ?? "/",
-        protocolVersion: this._request?.protocolVersion,
-        headers: headers,
-        body: this._request,
-        onHijack: this._onHijack);
-  }
-
-  Future<String> readAsString([Encoding encoding]) =>
-      this._shelf?.readAsString(encoding);
+  Future<String> readAsString([Encoding encoding]) => this._shelf?.readAsString(encoding);
 
   Stream<List<int>> read() => this._shelf?.read();
 
@@ -66,8 +62,7 @@ class Request {
   int get contentLength => this._request.contentLength;
 
   /// content type of request.body
-  ContentType get contentType =>
-      this._request.headers?.contentType ?? ContentType.TEXT;
+  ContentType get contentType => this._request.headers?.contentType ?? ContentType.TEXT;
 
   /// request cookies sent by the client
   List<Cookie> get cookies => this._request.cookies;
@@ -107,8 +102,7 @@ class Request {
   Map<String, String> get queryParams => this._shelf?.url?.queryParameters;
 
   /// all values of FOO query param
-  Map<String, List<String>> get queryParamsList =>
-      this._shelf?.url?.queryParametersAll;
+  Map<String, List<String>> get queryParamsList => this._shelf?.url?.queryParametersAll;
 
   /// The HTTP method (GET, ..etc)
   HttpMethod get method => new HttpMethod.parse(this._request.method);
@@ -126,7 +120,7 @@ class Request {
   Uri get url => this._shelf?.url;
 
   /// user agent
-  String get userAgent => this.headers.value(HttpHeaders.USER_AGENT);
+  String get userAgent => this.headers.value(HttpHeaders.userAgentHeader);
 
   String get path => this._shelf?.requestedUri?.path;
 
@@ -135,8 +129,6 @@ class Request {
   HttpRequest get request => this._request;
 
   void _onHijack(void callback(StreamChannel<List<int>> channel)) {
-    request.response
-        .detachSocket(writeHeaders: false)
-        .then((socket) => callback(new StreamChannel(socket, socket)));
+    request.response.detachSocket(writeHeaders: false).then((socket) => callback(new StreamChannel(socket, socket)));
   }
 }

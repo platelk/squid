@@ -1,6 +1,8 @@
 part of squid;
 
 class HttpMethod {
+  const HttpMethod.parse(this.value);
+  
   static const HttpMethod get = const HttpMethod.parse("GET");
   static const HttpMethod post = const HttpMethod.parse("POST");
   static const HttpMethod put = const HttpMethod.parse("PUT");
@@ -9,8 +11,6 @@ class HttpMethod {
   static const HttpMethod options = const HttpMethod.parse("OPTIONS");
 
   final String value;
-
-  const HttpMethod.parse(this.value);
 
   @override
   bool operator ==(Object object) {

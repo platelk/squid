@@ -57,4 +57,7 @@ class Path {
     }
     return false;
   }
+  
+  @override
+  String toString() => this.contextPath;
 }

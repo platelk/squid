@@ -16,6 +16,8 @@ void main() {
     };
   });
   get("/info", (req, res) => print("* /info"));
+  get("/info", (req, res) => print("* /info"));
+
   path("/v1", () {
     get("/user", (req, res) => print("* /v1/user"));
     path("/product", () {
@@ -23,5 +25,6 @@ void main() {
     });
   });
 
-  start("0.0.0.0", 8080);
+  print("Starting server on 8080.");
+  start("0.0.0.0", 8080).then((s) => print(s.routes));
 }

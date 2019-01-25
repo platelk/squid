@@ -1,16 +1,17 @@
 part of squid;
 
 class QueryParamsMap {
-  final RegExp keyPattern = new RegExp("\\A[\\[\\]]*([^\\[\\]]+)\\]*");
-
-  Map<String, QueryParamsMap> _queryMap = {};
-  List<String> _values = [];
-
   QueryParamsMap();
 
   QueryParamsMap.fromParamsList(Map<String, List<String>> params) {
     this._loadQueryString(params);
   }
+  
+  final RegExp keyPattern = new RegExp("\\A[\\[\\]]*([^\\[\\]]+)\\]*");
+
+  Map<String, QueryParamsMap> _queryMap = {};
+
+  List<String> _values = [];
 
   void _loadQueryString(Map<String, List<String>> params) {
     params.forEach((k, v) => this.loadKeys(k, v));

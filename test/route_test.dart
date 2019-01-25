@@ -51,15 +51,15 @@ void main() {
     });
     test("with any content-type", () {
       var r1 = new Route("/test", (req, res) => "");
-      expect(r1.match(HttpMethod.get, "/test", ContentType.JSON), isTrue);
+      expect(r1.match(HttpMethod.get, "/test", ContentType.json), isTrue);
     });
     test("with wrong content type and specific accept type", () {
       var r1 = new Route("/test", (req, res) => "", acceptType: "application/json");
-      expect(r1.match(HttpMethod.get, "/test", ContentType.TEXT), isFalse);
+      expect(r1.match(HttpMethod.get, "/test", ContentType.text), isFalse);
     });
     test("with right primary content type and specific accept type", () {
       var r1 = new Route("/test", (req, res) => "", acceptType: "application/*");
-      expect(r1.match(HttpMethod.get, "/test", ContentType.JSON), isTrue);
+      expect(r1.match(HttpMethod.get, "/test", ContentType.json), isTrue);
     });
     test("with path trap", () {
       var r1 = new Route("/*", (req, res) => "");

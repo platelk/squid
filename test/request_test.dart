@@ -11,7 +11,7 @@ void main() {
       var m = MockHttpRequest();
       when(m.contentLength).thenReturn(10);
       var req = Request(m);
-      expect(req.contentLength, equals(0));
+      expect(req.contentLength, equals(10));
     });
   });
 }
