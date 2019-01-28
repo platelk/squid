@@ -71,32 +71,32 @@ class Routes extends Route {
     }
   }
 
-  void get(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
+  void get(String path, HandlerFunc handler, {ContentType acceptType}) {
     this.add(new Route(this.path + path, handler,
         method: HttpMethod.get, acceptType: acceptType));
   }
 
-  void post(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
+  void post(String path, HandlerFunc handler, {ContentType acceptType}) {
     this.add(new Route(this.path + path, handler,
         method: HttpMethod.post, acceptType: acceptType));
   }
 
-  void put(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
+  void put(String path, HandlerFunc handler, {ContentType acceptType}) {
     this.add(new Route(this.path + path, handler,
         method: HttpMethod.put, acceptType: acceptType));
   }
 
-  void delete(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
+  void delete(String path, HandlerFunc handler, {ContentType acceptType}) {
     this.add(new Route(this.path + path, handler,
         method: HttpMethod.delete, acceptType: acceptType));
   }
 
-  void options(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
+  void options(String path, HandlerFunc handler, {ContentType acceptType}) {
     this.add(new Route(this.path + path, handler,
         method: HttpMethod.options, acceptType: acceptType));
   }
 
-  void patch(String path, HandlerFunc handler, {String acceptType: "*/*"}) {
+  void patch(String path, HandlerFunc handler, {ContentType acceptType}) {
     this.add(new Route(this.path + path, handler,
         method: HttpMethod.patch, acceptType: acceptType));
   }

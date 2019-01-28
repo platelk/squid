@@ -1,7 +1,15 @@
 part of squid;
 
+final allContentType = ContentType.parse("*/*");
+
 class AcceptType {
-  AcceptType.parse(String this.value) {
+  AcceptType(List<ContentType> contentTypes) {
+    for (var v in contentTypes) {
+      this._acceptTypes[v] = 1.0;
+    }
+  }
+  
+  AcceptType.parse(String value) {
     var acceptedTypes = value.split(",");
     for (var acceptedType in acceptedTypes) {
       var res = acceptedType.split(";");
@@ -9,8 +17,7 @@ class AcceptType {
     }
   }
   
-  final Map<ContentType, double> _acceptTypes = const {};
-  final String value;
+  final Map<ContentType, double> _acceptTypes = {};
 
   bool match(ContentType contentType) {
     if (contentType == null) {

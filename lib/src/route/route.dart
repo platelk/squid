@@ -13,20 +13,21 @@ abstract class RouteMatcher {
 class Route implements RouteMatcher {
   Route(String contextPath, HandlerFunc this.handler,
       {HttpMethod this.method = HttpMethod.get,
-      String this.acceptType = "*/*"}) {
+      ContentType this.acceptType}) {
     if (!contextPath.startsWith("/")) {
       throw new FormatException("path in route must start with '/'", contextPath, 0);
     }
     if (contextPath.length > 1 && contextPath.endsWith("/")) {
       throw new FormatException("path in route must not end with '/'", contextPath, contextPath.length);
     }
-    this._acceptTypes = new AcceptType.parse(this.acceptType);
+    this.acceptType ??= allContentType;
+    this._acceptTypes = new AcceptType([this.acceptType]);
     this.contextPath = new Path(contextPath);
   }
 
   HttpMethod method;
   Path contextPath;
-  String acceptType;
+  ContentType acceptType;
   AcceptType _acceptTypes;
   HandlerFunc handler;
 

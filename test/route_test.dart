@@ -7,7 +7,7 @@ void main() {
   group("Route creation", () {
     test("with default params", () {
       var r = new Route("/", (req, res) => "");
-      expect(r.acceptType, equals("*/*"));
+      expect(r.acceptType, equals(allContentType));
       expect(r.method, equals(HttpMethod.get));
       expect(r.contextPath.contextPath, equals("/"));
     });
@@ -54,11 +54,11 @@ void main() {
       expect(r1.match(HttpMethod.get, "/test", ContentType.json), isTrue);
     });
     test("with wrong content type and specific accept type", () {
-      var r1 = new Route("/test", (req, res) => "", acceptType: "application/json");
+      var r1 = new Route("/test", (req, res) => "", acceptType: ContentType.json);
       expect(r1.match(HttpMethod.get, "/test", ContentType.text), isFalse);
     });
     test("with right primary content type and specific accept type", () {
-      var r1 = new Route("/test", (req, res) => "", acceptType: "application/*");
+      var r1 = new Route("/test", (req, res) => "", acceptType: ContentType.parse("application/*"));
       expect(r1.match(HttpMethod.get, "/test", ContentType.json), isTrue);
     });
     test("with path trap", () {

@@ -23,6 +23,7 @@ class Server extends Routes {
   Future _loop() async {
     await for (HttpRequest req in this._server) {
       this.serve(new Request(req), new Response(req.response));
+      req.response.close();
     }
   }
 }

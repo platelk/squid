@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:squid/squid.dart';
 
 void main() {
@@ -15,8 +16,8 @@ void main() {
       print("2- after use");
     };
   });
-  get("/info", (req, res) => print("* /info"));
-  get("/info", (req, res) => print("* /info"));
+  post("/info", (req, res) => print("* /info"), acceptType: ContentType.text);
+  post("/info", (req, res) => print("* /info in json"), acceptType: ContentType.json);
 
   path("/v1", () {
     get("/user", (req, res) => print("* /v1/user"));
