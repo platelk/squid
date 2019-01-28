@@ -2,7 +2,7 @@ part of squid;
 
 final allContentType = ContentType.parse("*/*");
 
-class AcceptType {
+class AcceptType implements Comparable<AcceptType> {
   AcceptType(List<ContentType> contentTypes) {
     for (var v in contentTypes) {
       this._acceptTypes[v] = 1.0;
@@ -32,5 +32,23 @@ class AcceptType {
       }
     }
     return false;
+  }
+
+  @override
+  int compareTo(AcceptType other) {
+    var acc = 0;
+    for (var c in other._acceptTypes.keys) {
+      if (this.match(c)) {
+        acc++;
+      } else {
+        acc--;
+      }
+    }
+    return acc;
+  }
+  
+  @override
+  String toString() {
+    return this._acceptTypes.toString();
   }
 }

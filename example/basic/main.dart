@@ -16,8 +16,9 @@ void main() {
       print("2- after use");
     };
   });
-  post("/info", (req, res) => print("* /info"), acceptType: ContentType.text);
+  post("/info", (req, res) => print("* /info"));
   post("/info", (req, res) => print("* /info in json"), acceptType: ContentType.json);
+  post("/info", (req, res) => print("* /info in text"), acceptType: ContentType.text);
 
   path("/v1", () {
     get("/user", (req, res) => print("* /v1/user"));

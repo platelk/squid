@@ -10,7 +10,7 @@ abstract class RouteMatcher {
   void serve(Request req, Response res);
 }
 
-class Route implements RouteMatcher {
+class Route implements RouteMatcher, Comparable<Route> {
   Route(String contextPath, HandlerFunc this.handler,
       {HttpMethod this.method = HttpMethod.get,
       ContentType this.acceptType}) {
@@ -46,6 +46,10 @@ class Route implements RouteMatcher {
         this._acceptTypes.match(contentType) &&
         this.contextPath.match(path);
   }
+  
+  bool matchType(ContentType type) {
+    return this._acceptTypes.match(type);
+  }
 
   @override
   bool operator ==(Object o) {
@@ -59,6 +63,11 @@ class Route implements RouteMatcher {
   
   @override
   String toString() {
-    return "[${this.method.value} ${this.contextPath}]";
+    return "[${this.method.value} ${this.contextPath} ${this._acceptTypes}]";
+  }
+
+  @override
+  int compareTo(Route other) {
+    return this.contextPath.compareTo(other.contextPath) + this._acceptTypes.compareTo(other._acceptTypes);
   }
 }

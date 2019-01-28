@@ -37,6 +37,7 @@ class Routes extends Route {
   void add(Route r) {
     r.handler = this.middleware(r.handler);
     this._routes.add(r);
+    this._routes.sort((r1, r2) => r1.compareTo(r2));
   }
 
   Routes group(String path) {

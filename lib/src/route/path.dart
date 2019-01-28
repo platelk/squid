@@ -4,7 +4,7 @@ const String pathParamsSep = ':';
 const String uriPathSep = '/';
 const String jokerPath = '*';
 
-class Path {
+class Path implements Comparable<Path> {
   String contextPath;
   Path(String this.contextPath);
 
@@ -60,4 +60,9 @@ class Path {
   
   @override
   String toString() => this.contextPath;
+
+  @override
+  int compareTo(Path other) {
+    return this.contextPath.compareTo(other.contextPath);
+  }
 }
