@@ -19,4 +19,9 @@ class HttpMethod {
     }
     return false;
   }
+  
+  @override
+  String toString() {
+    return value;
+  }
 }

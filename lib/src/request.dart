@@ -1,5 +1,10 @@
 part of squid;
 
+var DefaultRequestBinder = <ContentType, Binder>{
+  ContentType.json: jsonBinder,
+  ContentType.text: stringBinder
+};
+
 /// [Request] is the representation of an incoming HTTP request
 ///
 /// [Request] will provide simple functions to interact with an http incoming request
@@ -27,6 +32,9 @@ class Request {
   /// _params hold the parsed query parameters based on the [contextPath]
   Map<String, String> _params;
 
+  /// _binder will hold the mapping of which [Binder] to use based on the accepted types
+  Map<ContentType, Binder> binders = Map.from(DefaultRequestBinder);
+  
   /// encoding is the encoding information which will be used for decode the request's body.
   /// It will be discover by default using HTTP header if not specified.
   Encoding encoding;
@@ -127,8 +135,22 @@ class Request {
   shelf.Request get shelfRequest => this._shelf;
 
   HttpRequest get request => this._request;
+  
+  /// bind will parse the incoming request, based on the content type to bind the body to the type T
+  Future<T> bind<T>() async {
+    T receiver;
+    this.binders[this.contentType](await this.body, receiver);
+    return receiver;
+  }
+  
+  /// bindOn will parse the incoming request, based on the content type to bind the body to the receiver to reuse memory
+  Future bindOn<T>(T receiver) async {
+    this.binders[this.contentType](await this.body, receiver);
+  }
 
   void _onHijack(void callback(StreamChannel<List<int>> channel)) {
     request.response.detachSocket(writeHeaders: false).then((socket) => callback(new StreamChannel(socket, socket)));
   }
+  
+  
 }

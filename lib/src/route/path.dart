@@ -5,8 +5,8 @@ const String uriPathSep = '/';
 const String jokerPath = '*';
 
 class Path implements Comparable<Path> {
-  String contextPath;
   Path(String this.contextPath);
+  String contextPath;
 
   bool match(String path) {
     var j = 0;

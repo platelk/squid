@@ -1,10 +1,6 @@
 part of squid;
 
 class Routes extends Route {
-  String path;
-  List<Route> _routes = [];
-  Handler middleware = (h) => h;
-
   Routes(String this.path) : super("/", (req, res) => "") {
     if (this.path.length >= 1 && this.path[this.path.length - 1] == '/') {
       throw new FormatException("path in group shouldn't end with '/'",
@@ -12,16 +8,21 @@ class Routes extends Route {
     }
   }
   
+  String path;
+  List<Route> _routes = [];
+
+  Handler middleware = (h) => h;
+  
   List<Route> get routes => new List.from(this._routes, growable: false);
 
   @override
-  void serve(Request req, Response res) {
+  bool serve(Request req, Response res) {
     for (var route in this._routes) {
       if (route.match(req.method, req.path, req.contentType)) {
-        route.serve(req, res);
-        return;
+        return route.serve(req, res);
       }
     }
+    return false;
   }
 
   @override

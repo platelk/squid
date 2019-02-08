@@ -7,7 +7,7 @@ typedef HandlerFunc Handler(HandlerFunc h);
 abstract class RouteMatcher {
   bool match(HttpMethod httpMethod, String path, ContentType contentType);
 
-  void serve(Request req, Response res);
+  bool serve(Request req, Response res);
 }
 
 class Route implements RouteMatcher, Comparable<Route> {
@@ -32,12 +32,14 @@ class Route implements RouteMatcher, Comparable<Route> {
   HandlerFunc handler;
 
   @override
-  void serve(Request req, Response res) {
+  bool serve(Request req, Response res) {
     if (this.handler != null) {
       // Provide which context trigger the handler
       req.contextPath = this.contextPath;
       this.handler(req, res);
+      return true;
     }
+    return false;
   }
 
   @override
@@ -68,6 +70,6 @@ class Route implements RouteMatcher, Comparable<Route> {
 
   @override
   int compareTo(Route other) {
-    return this.contextPath.compareTo(other.contextPath) + this._acceptTypes.compareTo(other._acceptTypes);
+    return -this.contextPath.compareTo(other.contextPath) + this._acceptTypes.compareTo(other._acceptTypes);
   }
 }

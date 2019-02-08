@@ -7,6 +7,8 @@ class Server extends Routes {
   Server() : super("");
 
   HttpServer _server;
+  
+  HandlerFunc notFoundHandler = notFoundHandlerFunc;
 
   Future<Server> start(String host, int port) async {
     this._server = await HttpServer.bind(host, port, shared: true);
@@ -21,9 +23,13 @@ class Server extends Routes {
   }
 
   Future _loop() async {
-    await for (HttpRequest req in this._server) {
-      this.serve(new Request(req), new Response(req.response));
-      req.response.close();
+    await for (HttpRequest request in this._server) {
+      var req = new Request(request);
+      var res = new Response(request.response);
+      if (!this.serve(req, res)) {
+        notFoundHandler(req, res);
+      }
+      res.close();
     }
   }
 }
