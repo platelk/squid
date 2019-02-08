@@ -12,6 +12,10 @@ String stringRenderer(dynamic data) {
 	return data.toString();
 }
 
+String htmlRenderer(dynamic data) {
+	return data.toString();
+}
+
 String formRenderer(dynamic data) {
 	return Uri.encodeQueryComponent(data.toString());
 }
