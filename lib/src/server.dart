@@ -9,6 +9,8 @@ class Server extends Routes {
   HttpServer _server;
   
   HandlerFunc notFoundHandler = notFoundHandlerFunc;
+  ErrorHandlerFunc internalErrorHandler = errorHandlerFunc;
+  ExceptionHandlerFunc internalExceptionHandler = exceptionHandlerFunc;
 
   Future<Server> start(String host, int port) async {
     this._server = await HttpServer.bind(host, port, shared: true);
@@ -26,10 +28,17 @@ class Server extends Routes {
     await for (HttpRequest request in this._server) {
       var req = new Request(request);
       var res = new Response(request.response);
-      if (!this.serve(req, res)) {
-        notFoundHandler(req, res);
+      try {
+        if (!this.serve(req, res)) {
+          notFoundHandler(req, res);
+        }
+      } on Exception catch (e) {
+        internalExceptionHandler(e, req, res);
+      } on Error catch (e) {
+        internalErrorHandler(e, req, res);
+      } finally {
+        res.close();
       }
-      res.close();
     }
   }
 }

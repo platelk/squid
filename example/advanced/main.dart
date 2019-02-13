@@ -2,7 +2,7 @@ import 'package:squid/squid.dart';
 
 void main() {
   var users = <String, dynamic>{
-    "1": {"name": "fred", "age": 42},
+    "1": {"name": "fred", 3: 42},
     "2": {"name": "joe", "age": 36}
   };
   use((HandlerFunc h) {

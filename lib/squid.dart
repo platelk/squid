@@ -30,4 +30,4 @@ part 'src/route/route.dart';
 
 part 'src/route/routes.dart';
 
-part 'src/handlers/not_found.dart';
+part 'src/handlers/handlers.dart';

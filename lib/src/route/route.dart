@@ -1,9 +1,5 @@
 part of squid;
 
-typedef HandlerFunc = void Function(Request req, Response res);
-
-typedef HandlerFunc Handler(HandlerFunc h);
-
 abstract class RouteMatcher {
   bool match(HttpMethod httpMethod, String path, ContentType contentType);
 
