@@ -1,10 +1,23 @@
+import 'dart:io';
+
 import 'package:squid/squid.dart';
 
+class User {
+  User(this.name, this.age);
+  
+  String name;
+  int age;
+  
+  @override
+  String toString() => "[name:${this.name};age:${this.age}]";
+}
+
+var users = <String, dynamic>{
+  "1": User("john", 42),
+  "2": User("joe", 36)
+};
+
 void main() {
-  var users = <String, dynamic>{
-    "1": {"name": "fred", 3: 42},
-    "2": {"name": "joe", "age": 36}
-  };
   use((HandlerFunc h) {
     return (req, res) {
       print(
@@ -17,6 +30,7 @@ void main() {
   path("/v1", () {
     path("/user", () {
       get("", (req, res) => res.json(users));
+      post("", addUser);
       path("/:id", () {
         get("", (req, res) => res.json(users[req.param("id")]));
         get("/name", (req, res) => res.json(users[req.param("id")]["name"]));
@@ -29,4 +43,12 @@ void main() {
 
   print("Starting server on 8080.");
   start("0.0.0.0", 8080).then((s) => print(s.routes));
+}
+
+void addUser(Request req, Response res) {
+  print(req.contentType);
+  print(req.contentType == ContentType.json);
+  var user = req.bind<User>();
+  print(user);
+  res.json(users);
 }

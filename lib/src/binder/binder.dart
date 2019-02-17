@@ -12,7 +12,6 @@ String stringBinder<T>(String data, T receiver) {
 	return data;
 }
 
-
 T formBinder<T>(String data, T receiver) {
 	return Uri.parse(data).queryParameters as T;
 }

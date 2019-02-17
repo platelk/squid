@@ -1,8 +1,8 @@
 part of squid;
 
-var DefaultRequestBinder = <ContentType, Binder>{
-  ContentType.json: jsonBinder,
-  ContentType.text: stringBinder
+var DefaultRequestBinder = <String, Binder>{
+  ContentType.json.toString(): jsonBinder,
+  ContentType.text.toString(): stringBinder
 };
 
 /// [Request] is the representation of an incoming HTTP request
@@ -139,7 +139,8 @@ class Request {
   /// bind will parse the incoming request, based on the content type to bind the body to the type T
   Future<T> bind<T>() async {
     T receiver;
-    this.binders[this.contentType](await this.body, receiver);
+    var binder = this.binders[this.contentType] ?? stringBinder;
+    binder(await this.body, receiver);
     return receiver;
   }
   
