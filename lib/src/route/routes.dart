@@ -16,7 +16,7 @@ class Routes extends Route {
   List<Route> get routes => new List.from(this._routes, growable: false);
 
   @override
-  bool serve(Request req, Response res) {
+  Future<bool> serve(Request req, Response res) async {
     for (var route in this._routes) {
       if (route.match(req.method, req.path, req.contentType)) {
         return route.serve(req, res);

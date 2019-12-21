@@ -107,8 +107,10 @@ class Response {
   /// NOTE: Writes to the [IOSink] may be buffered, and may not be flushed by
   /// a call to `close()`. To flush all buffered writes, call `flush()` before
   /// calling `close()`.
-  Future close() {
-    return this._response.close();
+  Future close() async {
+    return this.flush().then<void>((dynamic e) async {
+      return this._response.close();
+    });
   }
 
   /// Get a future that will complete when the consumer closes, or when an

@@ -25,6 +25,10 @@ void main() {
       var p = new Path("/user/:id/info/:date");
       expect(p.match("/user/9/test/info/now"), isFalse);
     });
+    test("with named joker params", () {
+      var p = new Path("/user/:info*");
+      expect(p.match("/user/9/test/info/now"), isTrue);
+    });
   });
   group("Path extract params", () {
     test("with no params", () {
@@ -41,6 +45,10 @@ void main() {
       var p = new Path("/user/:id/:date");
       expect(p.extractParams("/user/9/now"), isMap);
       expect(p.extractParams("/user/9/now"), equals(<String, String>{"id": "9", "date": "now"}));
+    });
+    test("with named joker params", () {
+      var p = new Path("/user/:info*");
+      expect(p.extractParams("/user/multiple/path"), equals(<String, String>{"info":"multiple/path"}));
     });
   });
 }

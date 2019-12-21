@@ -3,16 +3,16 @@ import 'package:squid/squid.dart';
 
 void main() {
   use((HandlerFunc h) {
-    return (req, res) {
+    return (req, res) async {
       print("1- before use");
-      h(req, res);
+      await h(req, res);
       print("1- after use");
     };
   });
   use((HandlerFunc h) {
-    return (req, res) {
+    return (req, res) async {
       print("2- before use");
-      h(req, res);
+      await h(req, res);
       print("2- after use");
     };
   });
@@ -26,6 +26,8 @@ void main() {
       get("/list", (req, res) => print("* /v1/product/list"));
     });
   });
+  
+  get("/:path", directoryHandler("."));
 
   print("Starting server on 8080.");
   start("0.0.0.0", 8080).then((s) => print(s.routes));

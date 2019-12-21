@@ -12,7 +12,7 @@ class Path implements Comparable<Path> {
     var j = 0;
     for (var i = 0; i < this.contextPath.length; i++, j++) {
       if (this.contextPath[i] == pathParamsSep) {
-        for (i += 1; i < this.contextPath.length && this.contextPath[i] != uriPathSep; i++);
+        for (i += 1; i < this.contextPath.length && this.contextPath[i] != uriPathSep && this.contextPath[i] != jokerPath; i++);
         for (; j < path.length && path[j] != uriPathSep; j++);
       }
       if (i < this.contextPath.length && this.contextPath[i] == jokerPath) {
@@ -37,11 +37,11 @@ class Path implements Comparable<Path> {
     for (var i = 0; i < this.contextPath.length; i++, j++) {
       if (this.contextPath[i] == pathParamsSep) {
         var n = "";
-        for (i += 1; i < this.contextPath.length && this.contextPath[i] != uriPathSep; i++) {
+        for (i += 1; i < this.contextPath.length && this.contextPath[i] != uriPathSep && this.contextPath[i] != jokerPath; i++) {
           n += this.contextPath[i];
         }
         var val = "";
-        for (; j < path.length && path[j] != uriPathSep; j++) {
+        for (; j < path.length && (path[j] != uriPathSep || this.contextPath[i] == jokerPath); j++) {
           val += path[j];
         }
         params[n] = val;

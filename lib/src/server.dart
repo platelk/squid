@@ -29,7 +29,8 @@ class Server extends Routes {
       var req = new Request(request);
       var res = new Response(request.response);
       try {
-        if (!this.serve(req, res)) {
+        var found = await this.serve(req, res);
+        if (!found) {
           notFoundHandler(req, res);
         }
       } on Exception catch (e) {

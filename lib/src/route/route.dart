@@ -3,7 +3,7 @@ part of squid;
 abstract class RouteMatcher {
   bool match(HttpMethod httpMethod, String path, ContentType contentType);
 
-  bool serve(Request req, Response res);
+  Future<bool> serve(Request req, Response res);
 }
 
 class Route implements RouteMatcher, Comparable<Route> {
@@ -28,11 +28,11 @@ class Route implements RouteMatcher, Comparable<Route> {
   HandlerFunc handler;
 
   @override
-  bool serve(Request req, Response res) {
+  Future<bool> serve(Request req, Response res) async {
     if (this.handler != null) {
       // Provide which context trigger the handler
       req.contextPath = this.contextPath;
-      this.handler(req, res);
+      await this.handler(req, res);
       return true;
     }
     return false;

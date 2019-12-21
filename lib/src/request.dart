@@ -1,8 +1,8 @@
 part of squid;
 
-var DefaultRequestBinder = <String, Binder>{
-  ContentType.json.toString(): jsonBinder,
-  ContentType.text.toString(): stringBinder
+var DefaultRequestBinder = <ContentType, Binder>{
+  ContentType.json: jsonBinder,
+  ContentType.text: stringBinder
 };
 
 /// [Request] is the representation of an incoming HTTP request

@@ -1,7 +1,7 @@
 part of squid;
 
 
-typedef HandlerFunc = void Function(Request req, Response res);
+typedef HandlerFunc = FutureOr Function(Request req, Response res);
 
 typedef HandlerFunc Handler(HandlerFunc h);
 
