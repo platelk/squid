@@ -2,7 +2,9 @@ part of squid;
 
 var DefaultRequestBinder = <ContentType, Binder>{
   ContentType.json: jsonBinder,
-  ContentType.text: stringBinder
+  ContentType.parse('application/json'): jsonBinder,
+  ContentType.text: stringBinder,
+  ContentType.parse('application/x-www-form-urlencoded'): formBinder,
 };
 
 /// [Request] is the representation of an incoming HTTP request
@@ -139,14 +141,25 @@ class Request {
   /// bind will parse the incoming request, based on the content type to bind the body to the type T
   Future<T> bind<T>() async {
     T receiver;
-    var binder = this.binders[this.contentType] ?? stringBinder;
-    binder(await this.body, receiver);
-    return receiver;
+    return bindOn<T>(receiver);
   }
   
   /// bindOn will parse the incoming request, based on the content type to bind the body to the receiver to reuse memory
-  Future bindOn<T>(T receiver) async {
-    this.binders[this.contentType](await this.body, receiver);
+  Future<T> bindOn<T>(T receiver) async {
+    var body = await this.body;
+    var found = false;
+    for (var c in this.binders.keys) {
+      var b = this.binders[c];
+      if (c.primaryType == contentType.primaryType && c.subType == contentType.subType && (c.charset == "" || c.charset == contentType.charset)) {
+        receiver = b(body, receiver) as T;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      return stringBinder(body, receiver) as T;
+    }
+    return receiver;
   }
 
   void _onHijack(void callback(StreamChannel<List<int>> channel)) {
