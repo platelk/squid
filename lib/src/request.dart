@@ -77,6 +77,15 @@ class Request {
   /// request cookies sent by the client
   List<Cookie> get cookies => this._request.cookies;
 
+  Cookie getCookie(String name) {
+    for (final cookie in cookies) {
+      if (cookie.name == name) {
+        return cookie;
+      }
+    }
+    return null;
+  }
+
   /// the HTTP header list
   HttpHeaders get headers => this._request.headers;
 

@@ -19,6 +19,12 @@ class Response {
 
   HttpHeaders get headers => this._response.headers;
 
+  List<Cookie> get cookies => this._response.cookies;
+
+  void addCookie(Cookie c) {
+    this._response.cookies.add(c);
+  }
+
   HttpResponse get raw => this._response;
 
   void redirect(String content, [int code = HttpStatus.movedTemporarily]) {
@@ -108,8 +114,8 @@ class Response {
   /// a call to `close()`. To flush all buffered writes, call `flush()` before
   /// calling `close()`.
   Future close() async {
-    return this.flush().then<void>((dynamic e) async {
-      return this._response.close();
+    return this.flush().whenComplete(() async {
+      return await this._response.close();
     });
   }
 

@@ -38,7 +38,12 @@ class Server extends Routes {
       } on Error catch (e) {
         internalErrorHandler(e, req, res);
       } finally {
-        res.close();
+        try {
+          print('${req.path}');
+          res.close();
+        } catch (e) {
+          print('${req.path} ${e}');
+        }
       }
     }
   }
